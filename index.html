@@ -805,6 +805,37 @@
       #menu-screen .garage-preview canvas { max-width: 100%; height: auto; }
     }
 
+
+    /* ==================== CAMPEONATOS DEL MOTOR ==================== */
+    .championship-section {
+      margin: 0 26px 22px;
+      padding: 18px;
+      background: linear-gradient(145deg, rgba(13,19,31,.97), rgba(7,10,17,.97));
+      border: 1px solid var(--gt-border);
+      border-radius: 14px;
+      box-shadow: 0 14px 36px rgba(0,0,0,.38);
+    }
+    .championship-heading { display:flex; align-items:flex-end; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:14px; }
+    .championship-heading p { color:#94a3b8; font-size:.76rem; margin-top:5px; }
+    .championship-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(270px,1fr)); gap:12px; }
+    .championship-card { background:linear-gradient(155deg,rgba(255,255,255,.065),rgba(255,255,255,.018)); border:1px solid var(--gt-border); border-radius:12px; padding:13px; min-width:0; }
+    .championship-card:hover { border-color:rgba(0,210,255,.48); }
+    .championship-card-head { display:flex; align-items:center; gap:11px; margin-bottom:10px; }
+    .series-mark { width:112px; height:56px; flex:0 0 112px; display:grid; place-items:center; overflow:hidden; border-radius:5px; border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.96); box-shadow:0 4px 12px rgba(0,0,0,.24); padding:3px; }
+    .series-mark svg { width:100%; height:100%; display:block; overflow:visible; }
+    .championship-card-head { min-height:52px; }
+    .championship-card h3 { font-size:.91rem; letter-spacing:.7px; text-transform:uppercase; }
+    .championship-card .series-class { color:#94a3b8; font-size:.68rem; margin-top:3px; }
+    .championship-meta { color:#cbd5e1; font-size:.72rem; line-height:1.45; margin-bottom:10px; }
+    .championship-brands { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:10px; }
+    .championship-brand { display:flex; align-items:center; gap:5px; background:rgba(0,0,0,.3); border:1px solid rgba(255,255,255,.1); border-radius:6px; padding:3px 6px; color:#e2e8f0; font-size:.65rem; }
+    .championship-brand svg { width:28px; height:19px; }
+    .championship-car-list { display:grid; grid-template-columns:1fr 1fr; gap:5px; }
+    .championship-car { display:block; text-align:left; background:rgba(0,0,0,.24); color:#cbd5e1; border:1px solid rgba(255,255,255,.08); border-radius:6px; padding:6px 7px; font-size:.66rem; line-height:1.3; cursor:pointer; }
+    .championship-car:hover { border-color:var(--gt-cyan); color:#fff; background:rgba(0,85,212,.2); }
+    .championship-empty { color:#94a3b8; font-size:.7rem; padding:8px; grid-column:1/-1; }
+    @media (max-width:600px) { .championship-section { margin:0 12px 16px; padding:12px; } .championship-grid { grid-template-columns:1fr; } }
+
   </style>
 </head>
 <body>
@@ -816,7 +847,7 @@
         <div class="gt-emblem">GT</div>
         <div class="gt-title">
           <h1>Gran Turismo</h1>
-          <span>Top-Down Edition • 60+ Marcas & Tuners • 218 Vehículos • 14 Circuitos</span>
+          <span>Top-Down Edition • 60+ Marcas & Tuners • 307 Vehículos • 26 Circuitos</span>
         </div>
       </div>
       <div class="topbar-controls">
@@ -830,7 +861,7 @@
     <div class="main-grid">
       <div class="panel">
         <div class="panel-header">
-          <div class="panel-title">1. Brand Central & Tuning Houses (<span id="carCount">248</span> Coches)</div>
+          <div class="panel-title">1. Brand Central & Tuning Houses (<span id="carCount">307</span> Coches)</div>
         </div>
         <!-- Filtro por Categoría -->
         <div class="filter-row">
@@ -890,20 +921,21 @@
 
         <div class="panel" style="flex:1;">
           <div class="panel-header">
-            <div class="panel-title">3. Seleccionar Circuito (10 Pistas)</div>
+            <div class="panel-title">3. Seleccionar Circuito (26 Pistas)</div>
           </div>
           <div id="trackList" class="track-list" style="margin-bottom:10px;"></div>
           <div class="race-settings-row">
             <label>Clima <select id="weatherSelect" class="race-select"><option value="clear">☀️ Despejado</option><option value="rain">🌧️ Lluvia</option><option value="fog">🌫️ Niebla</option></select></label>
             <label>Neumáticos <select id="compoundSelect" class="race-select"><option value="soft">🔴 Blandos</option><option value="medium" selected>🟡 Medios</option><option value="hard">⚪ Duros</option><option value="wet">🔵 Lluvia</option></select></label>
             <label>Horario <select id="timeSelect" class="race-select"><option value="day">🌤️ Día</option><option value="sunset">🌇 Atardecer</option><option value="night">🌙 Noche</option></select></label>
+            <label>Modo <select id="raceModeSelect" class="race-select"><option value="race">🏁 Gran carrera</option><option value="timeTrial">⏱ Contrarreloj</option><option value="drift">🔥 Drift challenge</option><option value="endurance">🏆 Resistencia</option></select></label>
             <label>Vueltas <input id="lapsInput" class="race-select" type="number" min="1" max="99" step="1" value="3" inputmode="numeric" aria-label="Número de vueltas de la carrera" /></label>
           </div>
           <button id="startRaceBtn" class="start-btn" type="button" onclick="startRace()">🏁 Iniciar Carrera</button>
         </div>
         <div class="panel career-panel">
           <div class="panel-header"><div class="panel-title">4. Carrera y progresión</div><strong id="careerCredits" style="color:var(--gt-gold)">Créditos: 0</strong></div>
-          <div class="career-stats"><span>Victorias: <b id="careerWins">0</b></span><span>Carreras: <b id="careerRaces">0</b></span><span>Vehículos: <b id="careerOwned">0</b>/<b id="careerTotal">218</b></span></div>
+          <div class="career-stats"><span>Victorias: <b id="careerWins">0</b></span><span>Carreras: <b id="careerRaces">0</b></span><span>Vehículos: <b id="careerOwned">0</b>/<b id="careerTotal">307</b></span></div>
           <div class="career-actions"><button class="pill-btn active" onclick="startChampionship()">🏆 Copa de 3 rondas</button><button class="pill-btn" onclick="buyUpgrade('engine')">⚙ Motor <span id="engineLevel">0</span></button><button class="pill-btn" onclick="buyUpgrade('grip')">🛞 Neumáticos <span id="gripLevel">0</span></button></div>
           <div id="careerMessage" class="career-message">Completa carreras para ganar créditos y desbloquear coches.</div>
           <div class="secret-hint">Secreto: escribe <b>PI…</b> en el menú. (La secuencia completa es un easter egg.)</div>
@@ -918,6 +950,14 @@
         </div>
       </div>
     </div>
+
+    <section class="championship-section" aria-labelledby="championshipTitle">
+      <div class="championship-heading">
+        <div><div class="panel-title" id="championshipTitle">6. Campeonatos del automovilismo</div><p>Explora las principales categorías y consulta los coches del garaje relacionados con cada campeonato.</p></div>
+        <span style="font-size:.68rem;color:#94a3b8;">Fichas de referencia · modelos disponibles en el juego</span>
+      </div>
+      <div id="championshipGrid" class="championship-grid"></div>
+    </section>
   </div>
 
   <!-- ==================== PANTALLA DE CARRERA ==================== -->
@@ -1101,7 +1141,7 @@ function getBrandLogoHTML(brand) {
   return BRAND_LOGOS[brand] || `<svg viewBox="0 0 60 40"><rect x="5" y="6" width="50" height="28" rx="6" fill="#172033" stroke="#94a3b8" stroke-width="1.5"/><text x="30" y="23" font-size="${brand && brand.length > 8 ? 8 : 11}" font-weight="900" fill="#fff" text-anchor="middle">${String(brand || "?").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").slice(0,12)}</text></svg>`;
 }
 
-// ==================== 2. CATÁLOGO DE 301 COCHES ====================
+// ==================== 2. CATÁLOGO DE 307 COCHES ====================
 const CARS = [
   // === PROTOTIPOS LMP1 / HYPERCAR / GR.1 (PROTO) ===
   { id: 1, brand: "Toyota Gazoo", name: "GR010 Hybrid Hypercar", region: "JP", cat: "PROTO", bodyType: "proto", cls: "Gr.1", hp: 986, weight: 878, drive: "AWD", maxSpeed: 376, accel: 99, handling: 98, color: "#dc2626", accent: "#ffffff", wing: "lmp" },
@@ -1438,7 +1478,14 @@ const CARS = [
   { id:298, brand:"Pandem", name:"Toyota GR86 Rocket Bunny", region:"JP", cat:"TUNER", bodyType:"street", bodyStyle:"jdm", cls:"TUNER", hp:420, weight:1200, drive:"RWD", maxSpeed:295, accel:88, handling:95, color:"#dc2626", accent:"#111827", wing:"swan" },
   { id:299, brand:"Spoon Sports", name:"Honda Civic Type R FL5", region:"JP", cat:"TUNER", bodyType:"street", bodyStyle:"jdm", cls:"TUNER", hp:390, weight:1300, drive:"FWD", maxSpeed:290, accel:89, handling:97, color:"#f8fafc", accent:"#0284c7", wing:"gt" },
   { id:300, brand:"Liberty Walk", name:"Ferrari 458 Italia LB-Silhouette", region:"JP", cat:"TUNER", bodyType:"street", bodyStyle:"jdm", cls:"TUNER", hp:650, weight:1390, drive:"RWD", maxSpeed:340, accel:95, handling:94, color:"#f8fafc", accent:"#dc2626", wing:"swan" },
-  { id:301, brand:"Mansory", name:"Porsche 911 Turbo S P9LM EVO", region:"EU", cat:"TUNER", bodyType:"street", bodyStyle:"jdm", cls:"TUNER", hp:900, weight:1600, drive:"AWD", maxSpeed:365, accel:98, handling:94, color:"#111827", accent:"#d4af37", wing:"swan" }
+  { id:301, brand:"Mansory", name:"Porsche 911 Turbo S P9LM EVO", region:"EU", cat:"TUNER", bodyType:"street", bodyStyle:"jdm", cls:"TUNER", hp:900, weight:1600, drive:"AWD", maxSpeed:365, accel:98, handling:94, color:"#111827", accent:"#d4af37", wing:"swan" },
+  // === SIETE INCORPORACIONES SOLICITADAS ===
+  { id:302, brand:"McLaren", name:"Senna", region:"EU", cat:"STREET", bodyType:"street", bodyStyle:"supercar", cls:"N700", hp:800, weight:1198, drive:"RWD", maxSpeed:335, accel:98, handling:99, color:"#f97316", accent:"#111827", wing:"swan" },
+  { id:303, brand:"Pininfarina", name:"Battista Anniversario", region:"EU", cat:"STREET", bodyType:"street", bodyStyle:"supercar", cls:"Hypercar", hp:1900, weight:2060, drive:"AWD", maxSpeed:350, accel:100, handling:96, color:"#f8fafc", accent:"#2563eb", wing:"swan" },
+  { id:304, brand:"KTM", name:"X-BOW GT-XR", region:"EU", cat:"STREET", bodyType:"street", bodyStyle:"supercar", cls:"N500", hp:500, weight:1130, drive:"RWD", maxSpeed:280, accel:93, handling:98, color:"#f97316", accent:"#111827", wing:"gt" },
+  { id:305, brand:"Lamborghini", name:"Sesto Elemento", region:"EU", cat:"STREET", bodyType:"street", bodyStyle:"supercar", cls:"N700", hp:570, weight:999, drive:"AWD", maxSpeed:350, accel:99, handling:99, color:"#4b5563", accent:"#dc2626", wing:"swan" },
+  { id:306, brand:"Lamborghini", name:"Veneno", region:"EU", cat:"STREET", bodyType:"street", bodyStyle:"supercar", cls:"Hypercar", hp:750, weight:1450, drive:"AWD", maxSpeed:355, accel:98, handling:97, color:"#dc2626", accent:"#111827", wing:"swan" },
+  { id:307, brand:"Lamborghini", name:"Centenario", region:"EU", cat:"STREET", bodyType:"street", bodyStyle:"supercar", cls:"Hypercar", hp:770, weight:1520, drive:"AWD", maxSpeed:350, accel:98, handling:97, color:"#111827", accent:"#facc15", wing:"swan" }
 ];
 
 // ==================== 3. 14 CIRCUITOS CON ESCENOGRAFÍA DETALLADA ====================
@@ -2721,6 +2768,7 @@ let player = {
 };
 
 let totalLaps = 3;
+let raceMode = "race", driftScore = 0;
 let lapStartTime = 0;
 let raceStartTime = 0;
 let bestLapTime = null;
@@ -2913,12 +2961,14 @@ const AI_PILOT_NAMES = [
 
 function spawnAIDrivers() {
   aiDrivers = [];
+  if (raceMode === "timeTrial") return;
+  const rivalCount = raceMode === "drift" ? 2 : raceMode === "endurance" ? 7 : 5;
   let pilotPool = [...AI_PILOT_NAMES].sort(() => Math.random() - 0.5);
   let pool = CARS.filter(c => c.id !== selectedCar.id && c.cat === selectedCar.cat);
   if (pool.length < 5) {
     pool = CARS.filter(c => c.id !== selectedCar.id);
   }
-  pool = pool.sort(() => Math.random() - 0.5).slice(0, 5);
+  pool = pool.sort(() => Math.random() - 0.5).slice(0, rivalCount);
 
   pool.forEach((car, i) => {
     const startIdx = (i + 1) * 4;
@@ -2963,12 +3013,16 @@ function initHUDLeds() {
 
 function startRace() {
   if (!isCarOwned(selectedCar)) { setCareerMessage("Compra este coche antes de competir."); return; }
+  raceMode=document.getElementById("raceModeSelect")?.value||"race";
   weatherMode=document.getElementById("weatherSelect")?.value||"clear";
   tireCompound=document.getElementById("compoundSelect")?.value||"medium";
   timeMode=document.getElementById("timeSelect")?.value||"day";
   const lapsInput=document.getElementById("lapsInput");
   const requestedLaps=Number.parseInt(lapsInput?.value,10);
   totalLaps=Number.isFinite(requestedLaps)?Math.min(99,Math.max(1,requestedLaps)):3;
+  if(raceMode==="endurance" && totalLaps<10) totalLaps=10;
+  if(raceMode==="timeTrial") totalLaps=Math.max(1,totalLaps);
+  driftScore=0;
   if(lapsInput) lapsInput.value=String(totalLaps);
   pitStopUsed=false; racePenaltySeconds=0;
   const pitBtn=document.getElementById("pitStopBtn"); if(pitBtn){pitBtn.disabled=false;pitBtn.textContent="🛠️ Box (B)";}
@@ -3116,6 +3170,12 @@ function updateRace(dt, now) {
   player.vx -= rx * lateralVel * (1 - Math.pow(grip, dt * 60));
   player.vy -= ry * lateralVel * (1 - Math.pow(grip, dt * 60));
 
+  if(raceMode==="drift" && currentSpeed>95){
+    const velocityAngle=Math.atan2(player.vy,player.vx);
+    let slip=Math.atan2(Math.sin(velocityAngle-player.angle),Math.cos(velocityAngle-player.angle));
+    const slipDeg=Math.abs(slip)*180/Math.PI;
+    if(slipDeg>12 && slipDeg<65 && !onGrass) driftScore += Math.round((slipDeg-10)*currentSpeed*dt*0.42);
+  }
   player.x += player.vx * dt;
   player.y += player.vy * dt;
   const compoundWear = tireCompound==="soft"?1.45:tireCompound==="hard"?0.68:tireCompound==="wet"?1.05:1.0;
@@ -3286,7 +3346,7 @@ function finishRace(now) {
     .sort((a,b)=>b.progress-a.progress);
   const position=standings.findIndex(x=>x.player)+1;
   document.getElementById("classificationTable").innerHTML=`<table class="classification-table"><thead><tr><th>Pos.</th><th>Piloto</th><th>Modelo del coche</th><th>Marca</th><th>Tiempo récord</th></tr></thead><tbody>${standings.map((entry,index)=>`<tr><td>${index+1}</td><td>${entry.pilotName}</td><td>${entry.car.name}</td><td><span class="classification-brand"><span class="brand-badge">${getBrandLogoHTML(entry.car.brand)}</span><span>${entry.car.brand}</span></span></td><td>${entry.bestLapTime!==null && entry.bestLapTime!==undefined ? formatTime(entry.bestLapTime) : "--:--.--"}</td></tr>`).join("")}</tbody></table>`;
-  const reward=[9000,6500,4500,3000,2000,1500][position-1]||1200;
+  const reward=raceMode==="timeTrial"?6500+Math.max(0,Math.round((100-carDamage)*18)):raceMode==="drift"?Math.min(18000,1200+Math.round(driftScore*0.12)):raceMode==="endurance"?11000:[9000,6500,4500,3000,2000,1500][position-1]||1200;
   const cleanBonus=carDamage<8?1500:0; const totalReward=reward+cleanBonus;
   career.credits+=totalReward; career.races++; if(position===1)career.wins++;
   if(position<=3)career.podiums=(career.podiums||0)+1;
@@ -3301,8 +3361,8 @@ function finishRace(now) {
     championshipText=`<div>🏆 Copa: ronda ${championship.round}/3 · +${earned} pts · Total ${championship.points} pts</div>`;
   }
   saveCareer();
-  document.getElementById("resultsHeadline").textContent=position===1?"¡Victoria!":`Puesto ${position} de 6`;
-  document.getElementById("resultsSummary").innerHTML=`<div>Tiempo total<b>${formatTime(elapsed)}</b></div><div>Mejor vuelta<b>${bestLapTime?formatTime(bestLapTime):"--:--"}</b></div><div>Neumáticos restantes<b>${Math.round(100-tireWear)}%</b></div><div>Daños<b>${Math.round(carDamage)}%</b></div>${championshipText?`<div style="grid-column:1/-1">${championshipText}</div>`:""}`;
+  document.getElementById("resultsHeadline").textContent=raceMode==="timeTrial"?"Contrarreloj completada":raceMode==="drift"?`Drift: ${driftScore.toLocaleString("es-MX")} pts`:position===1?"¡Victoria!":`Puesto ${position} de ${standings.length}`;
+  document.getElementById("resultsSummary").innerHTML=`${raceMode==="drift"?`<div>Puntuación drift<b>${driftScore.toLocaleString("es-MX")} pts</b></div>`:""}<div>Tiempo total<b>${formatTime(elapsed)}</b></div><div>Mejor vuelta<b>${bestLapTime?formatTime(bestLapTime):"--:--"}</b></div><div>Neumáticos restantes<b>${Math.round(100-tireWear)}%</b></div><div>Daños<b>${Math.round(carDamage)}%</b></div>${championshipText?`<div style="grid-column:1/-1">${championshipText}</div>`:""}`;
   document.getElementById("resultsReward").textContent=`+${totalReward.toLocaleString("es-MX")} créditos${cleanBonus?" (incluye bono de carrera limpia)":""}`;
   const btn=document.getElementById("resultsMainBtn");
   if(championship.active && championship.round<3){ btn.textContent="Siguiente ronda →"; btn.onclick=nextChampionshipRound; }
@@ -3330,6 +3390,21 @@ function drawClosedTrackPath(ctx) {
     ctx.lineTo(splinePoints[i].x, splinePoints[i].y);
   }
   ctx.closePath();
+}
+
+const SPONSOR_STYLES={
+  "MICHELIN":["#005baa","#ffffff"],"BREMBO":["#e30613","#ffffff"],"MOBIL 1":["#ffffff","#e31837"],"ROLEX":["#006039","#f4d35e"],"MOTUL":["#e30613","#ffffff"],"PIRELLI":["#f7c600","#111111"],"BRIDGESTONE":["#111111","#ffffff"],"YOKOHAMA":["#d71920","#ffffff"],"ADVAN":["#111111","#ed1c24"],"DHL":["#ffcc00","#d40511"],"RED BULL":["#102b68","#f7c600"],"ORACLE":["#c74634","#ffffff"],"CASTROL":["#00843d","#ffffff"],"SHELL":["#ffcc00","#d71920"],"HONDA":["#ffffff","#e60012"],"SONY":["#111111","#ffffff"],"TAG HEUER":["#087f46","#ffffff"],"TOTALENERGIES":["#e31b34","#ffffff"],"FANATEC":["#111111","#ffffff"],"TELCEL":["#0877bd","#ffffff"],"BANORTE":["#c8102e","#ffffff"],"GRAN TURISMO":["#0055d4","#ffffff"]
+};
+function drawSponsorWordmark(ctx,name,w,h){
+  const key=String(name||"RACE").toUpperCase(), style=SPONSOR_STYLES[key]||["#152238","#ffffff"];
+  ctx.save(); ctx.fillStyle=style[0]; ctx.fillRect(-w/2,-h/2,w,h);
+  ctx.fillStyle=style[1]; ctx.textAlign="center"; ctx.textBaseline="middle";
+  const fs=Math.max(7,Math.min(h*0.58,w/(Math.max(4,key.length)*0.62)));
+  ctx.font=`italic 1000 ${fs}px Arial, sans-serif`;
+  if(key==="MICHELIN") { ctx.beginPath();ctx.arc(-w*.36,0,h*.22,0,Math.PI*2);ctx.fill();ctx.fillStyle=style[0];ctx.beginPath();ctx.arc(-w*.36,0,h*.11,0,Math.PI*2);ctx.fill(); }
+  if(key==="PIRELLI") { ctx.fillRect(-w*.46,-h*.27,w*.92,h*.08); }
+  if(key==="ROLEX") { ctx.beginPath();for(let i=0;i<5;i++){const a=-Math.PI/2+i*Math.PI*2/5;ctx.lineTo(-w*.36+Math.cos(a)*h*.15,Math.sin(a)*h*.15);}ctx.closePath();ctx.fill(); }
+  ctx.fillText(key,0,1, w*.88); ctx.restore();
 }
 
 function renderTrackDecorationsLayer(ctx, W, H) {
@@ -3412,11 +3487,7 @@ function renderTrackDecorationsLayer(ctx, W, H) {
     ctx.lineWidth = 2.5;
     ctx.strokeRect(-75, -13, 150, 26);
 
-    ctx.fillStyle = "#ffffff";
-    ctx.font = "900 11px sans-serif";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.fillText(b.text, 0, 1);
+    drawSponsorWordmark(ctx,b.text,142,20);
     ctx.restore();
   });
 
@@ -3497,13 +3568,9 @@ function renderOverheadGantries(ctx, W, H) {
     ctx.fillRect(-20, -g.width / 2 - 12, 40, 16);
     ctx.fillRect(-20, g.width / 2 - 4, 40, 16);
 
-    // Texto del patrocinador en el puente
+    // Logotipo vectorial estilizado del patrocinador
     ctx.rotate(Math.PI / 2);
-    ctx.fillStyle = "#ffffff";
-    ctx.font = "900 13px sans-serif";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.fillText(g.text, 0, 0);
+    drawSponsorWordmark(ctx,g.text,Math.min(g.width-18,210),24);
     ctx.restore();
   });
 }
@@ -3672,11 +3739,48 @@ function renderMinimap() {
   mCtx.fill();
 }
 
+
+// ==================== CAMPEONATOS REALES ====================
+// Emblemas vectoriales originales inspirados en la identidad visual de cada serie.
+// Los vehículos se enlazan con el catálogo existente; no se alteran parrillas ni físicas.
+const SERIES_LOGOS = {
+
+  f1: `<svg viewBox="0 0 240 100" role="img" aria-label="Logotipo inspirado en Formula 1" xmlns="http://www.w3.org/2000/svg"><rect width="240" height="100" rx="8" fill="#fff"/><g fill="#e10600"><path d="M18 24H117L99 42H58L48 52H91L73 70H22L8 84H0L34 48H79L91 36H30Z"/><path d="M126 24H235L214 42H173L159 52H205L185 70H135L121 84H105L145 48H190L202 36H119Z"/><path d="M145 24H238L216 41H129Z"/><path d="M119 53H211L192 69H104Z"/></g></svg>`,
+
+  wec: `<svg viewBox="0 0 240 100" role="img" aria-label="Logotipo inspirado en FIA World Endurance Championship" xmlns="http://www.w3.org/2000/svg"><rect width="240" height="100" rx="8" fill="#fff"/><g fill="#0877bd"><path d="M13 17H39L51 53L67 17H91L105 53L119 17H145L114 72H91L77 40L61 72H39Z"/><path d="M151 17H226V34H171V40H218V55H171V62H227V78H146Z"/></g><path d="M15 83H225" stroke="#0877bd" stroke-width="2"/><text x="120" y="94" text-anchor="middle" font-family="Arial,sans-serif" font-size="7.5" font-weight="700" letter-spacing="1.1" fill="#243746">FIA WORLD ENDURANCE CHAMPIONSHIP</text></svg>`,
+  imsa: `<svg viewBox="0 0 150 72" role="img" aria-label="Emblema estilo IMSA"><rect width="150" height="72" rx="7" fill="#fff"/><path d="M8 16H142V55H8Z" fill="#123b70"/><path d="M12 20H138V30H12Z" fill="#e32636"/><path d="M12 42H138V51H12Z" fill="#e32636"/><text x="75" y="43" text-anchor="middle" font-size="31" font-weight="1000" font-style="italic" fill="#fff" letter-spacing="-2">IMSA</text></svg>`,
+  gtwc: `<svg viewBox="0 0 150 72" role="img" aria-label="Emblema estilo GT World Challenge"><rect width="150" height="72" rx="7" fill="#101827"/><path d="M10 16H140V56H10Z" fill="#e5e7eb"/><path d="M10 16H140V26H10Z" fill="#d71920"/><text x="75" y="47" text-anchor="middle" font-size="25" font-weight="1000" font-style="italic" fill="#111827" letter-spacing="-1.5">GT</text><text x="113" y="45" text-anchor="middle" font-size="9" font-weight="900" fill="#d71920">WORLD</text><text x="113" y="53" text-anchor="middle" font-size="7" font-weight="900" fill="#111827">CHALLENGE</text></svg>`,
+  supergt: `<svg viewBox="0 0 150 72" role="img" aria-label="Emblema estilo SUPER GT"><rect width="150" height="72" rx="7" fill="#f5f5f5"/><path d="M0 0H150V12H0Z" fill="#d71920"/><text x="75" y="43" text-anchor="middle" font-size="30" font-weight="1000" font-style="italic" fill="#111827" letter-spacing="-2">SUPER GT</text><path d="M16 53H134" stroke="#d71920" stroke-width="4"/></svg>`,
+  sf: `<svg viewBox="0 0 150 72" role="img" aria-label="Emblema estilo Super Formula"><rect width="150" height="72" rx="7" fill="#fff"/><path d="M0 0H150V13H0Z" fill="#e60012"/><path d="M16 52L43 18H62L42 44H72L62 57H16Z" fill="#111827"/><text x="105" y="48" text-anchor="middle" font-size="29" font-weight="1000" font-style="italic" fill="#111827">SF</text><text x="105" y="59" text-anchor="middle" font-size="7" font-weight="900" fill="#e60012">SUPER FORMULA</text></svg>`,
+  fd: `<svg viewBox="0 0 240 76" role="img" aria-label="Emblema inspirado en Formula Drift" xmlns="http://www.w3.org/2000/svg"><path d="M10 13H224L208 27H28L19 36H205L189 50H12L2 61H178L163 70H0L19 49H170L183 38H0L15 24H194Z" fill="#ed1c24" opacity=".96"/><text x="120" y="46" text-anchor="middle" font-family="Arial Black,Arial,sans-serif" font-size="25" font-style="italic" font-weight="1000" letter-spacing="-1.8" fill="#fff" stroke="#111" stroke-width="1.2" paint-order="stroke">FORMULA DRIFT</text><path d="M35 55H205L193 63H26Z" fill="#ed1c24"/></svg>`
+};
+const MOTOR_CHAMPIONSHIPS = [
+  { name:"Formula 1", short:"F1", logo:"f1", color:"#e10600", category:"Monoplazas · campeonato mundial", detail:"Monoplazas de máxima categoría. Incluye modelos históricos de F1 presentes en el garaje.", test:c=>/W08 EQ Power\+ F1|97T Renault Turbo F1/.test(c.name) },
+  { name:"FIA World Endurance Championship", short:"WEC", logo:"wec", color:"#101820", category:"Hypercar · resistencia", detail:"Prototipos Hypercar y LMDh asociados a la resistencia internacional.", test:c=>/GR010 Hybrid|499P Le Mans|9X8 Wingless|A424 Beta|963 Penske|V-Series\.R LMDh/.test(c.name) },
+  { name:"IMSA WeatherTech", short:"IMSA", logo:"imsa", color:"#123b70", category:"GTP · GTD · resistencia", detail:"Prototipos GTP y deportivos GT que representan las clases de resistencia norteamericanas.", test:c=>/M Hybrid V8 LMDh|963 Penske|V-Series\.R LMDh|GT3/.test(c.name) && (c.cat==="PROTO" || c.cat==="GT") },
+  { name:"GT World Challenge", short:"GTWC", logo:"gtwc", color:"#d71920", category:"GT3 · carreras sprint y endurance", detail:"Coches GT3 de distintas marcas, habituales en campeonatos internacionales de Gran Turismo.", test:c=>c.cat==="GT" && /GT3|GT3-R|GT3 Evo|GT3 Endurance/.test(c.name) },
+  { name:"Super GT", short:"SUPER GT", logo:"supergt", color:"#d71920", category:"GT500 · GT300", detail:"Categoría japonesa de Gran Turismo. Se muestran los modelos de competición japoneses compatibles del catálogo.", test:c=>/GT-R.*GT|GT500|NSX.*GT|Supra.*GT/.test(c.name) },
+  { name:"Super Formula", short:"SF", logo:"sf", color:"#e60012", category:"Monoplazas · Japón", detail:"Monoplazas SF23 de Honda y Toyota incluidos en el garaje.", test:c=>/Super Formula SF23/.test(c.name) },
+  { name:"Formula Drift", short:"FD", logo:"fd", color:"#ed1c24", category:"Drift · PROSPEC / PRO", detail:"Coches de tracción trasera preparados para derrapar en tándem. Se muestran deportivos JDM y preparaciones de drift del garaje; no todos representan coches oficiales inscritos en la temporada actual.", test:c=>c.drive==="RWD" && ["STREET","TUNER"].includes(c.cat) && /Silvia|180SX|RX-7|AE86|BRZ|GR86|Chaser|Drift|Supra/.test(c.name) }
+];
+function renderChampionships(){
+  const host=document.getElementById("championshipGrid");
+  if(!host) return;
+  host.innerHTML=MOTOR_CHAMPIONSHIPS.map(series=>{
+    const cars=CARS.filter(series.test);
+    const brands=[...new Set(cars.map(c=>c.brand))];
+    const brandHTML=brands.map(brand=>`<span class="championship-brand">${getBrandLogoHTML(brand)}<span>${brand}</span></span>`).join("");
+    const carHTML=cars.length?cars.map(car=>`<button class="championship-car" type="button" onclick="selectCar(${car.id});document.getElementById('previewCanvas').scrollIntoView({behavior:'smooth',block:'center'});"><b>${car.brand}</b><br>${car.name}</button>`).join(""):'<div class="championship-empty">No hay modelos de esta categoría en el catálogo actual.</div>';
+    return `<article class="championship-card"><div class="championship-card-head"><div class="series-mark" style="background:${series.color}">${SERIES_LOGOS[series.logo]}</div><div><h3>${series.name}</h3><div class="series-class">${series.category}</div></div></div><p class="championship-meta">${series.detail}</p><div class="championship-brands">${brandHTML||'<span class="championship-empty">Marcas por confirmar</span>'}</div><div class="championship-car-list">${carHTML}</div></article>`;
+  }).join("");
+}
+
 // Inicialización
 selectCar(125);
 updateCareerUI();
 updateCollectionUI();
 renderTrackList();
+renderChampionships();
 animatePreview();
 requestAnimationFrame(gameLoop);
 </script>
