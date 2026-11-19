@@ -716,7 +716,16 @@
     .car-card.locked .car-class:after { content:' 🔒'; }
     .car-price { color:var(--gt-gold); font-size:.68rem; font-weight:800; margin-top:4px; }
     .overlay-modal { position:fixed; inset:0; z-index:40; display:none; align-items:center; justify-content:center; background:rgba(3,6,12,.88); backdrop-filter:blur(10px); padding:18px; }
-    .results-card { width:min(94vw,480px); background:var(--gt-panel); border:1px solid var(--gt-cyan); border-radius:16px; padding:24px; display:flex; flex-direction:column; gap:14px; box-shadow:0 20px 70px #0009; }
+    .results-card { width:min(96vw,900px); max-height:92vh; overflow:auto; background:var(--gt-panel); border:1px solid var(--gt-cyan); border-radius:16px; padding:24px; display:flex; flex-direction:column; gap:14px; box-shadow:0 20px 70px #0009; }
+    .classification-wrap { width:100%; overflow-x:auto; border:1px solid var(--gt-border); border-radius:10px; }
+    .classification-table { width:100%; min-width:620px; border-collapse:collapse; font-size:.78rem; text-align:left; }
+    .classification-table th { background:#111c2e; color:var(--gt-cyan); padding:11px 12px; font-size:.68rem; letter-spacing:.08em; text-transform:uppercase; }
+    .classification-table td { padding:11px 12px; border-top:1px solid #ffffff12; color:#dbe4f0; }
+    .classification-table tr:first-child td { color:var(--gt-gold); font-weight:800; }
+    .classification-table td:last-child { font-variant-numeric:tabular-nums; white-space:nowrap; }
+    .classification-brand { display:flex; align-items:center; gap:8px; white-space:nowrap; }
+    .classification-brand .brand-badge { width:38px; height:26px; padding:2px; border:1px solid #ffffff18; }
+    @media(max-width:600px) { .results-card { padding:16px; } }
     .results-card h2 { font-size:1.55rem; }
     .results-summary { display:grid; grid-template-columns:1fr 1fr; gap:9px; }
     .results-summary div { background:rgba(255,255,255,.06); padding:10px; border-radius:8px; color:#cbd5e1; font-size:.8rem; }
@@ -821,7 +830,7 @@
     <div class="main-grid">
       <div class="panel">
         <div class="panel-header">
-          <div class="panel-title">1. Brand Central & Tuning Houses (<span id="carCount">218</span> Coches)</div>
+          <div class="panel-title">1. Brand Central & Tuning Houses (<span id="carCount">248</span> Coches)</div>
         </div>
         <!-- Filtro por Categoría -->
         <div class="filter-row">
@@ -968,7 +977,7 @@
     </div>
   </div>
 
-  <div id="results-modal" class="overlay-modal"><div class="results-card"><div class="panel-title">RESULTADOS DE CARRERA</div><h2 id="resultsHeadline">¡Carrera completada!</h2><div id="resultsSummary" class="results-summary"></div><div id="resultsReward" class="results-reward"></div><button id="resultsMainBtn" class="start-btn" onclick="closeResults()">Volver al garaje</button></div></div>
+  <div id="results-modal" class="overlay-modal"><div class="results-card"><div class="panel-title">RESULTADOS DE CARRERA</div><h2 id="resultsHeadline">¡Carrera completada!</h2><div id="resultsSummary" class="results-summary"></div><div class="panel-title">CLASIFICACIÓN FINAL</div><div id="classificationTable" class="classification-wrap"></div><div id="resultsReward" class="results-reward"></div><button id="resultsMainBtn" class="start-btn" onclick="closeResults()">Volver al garaje</button></div></div>
 
   <!-- Modal de Pausa -->
   <div id="pause-modal">
@@ -1073,14 +1082,25 @@ const BRAND_LOGOS = {
   "Zenvo": `<svg viewBox="0 0 60 40"><path d="M10 28 L30 7 L50 28 H40 L30 17 L20 28 Z" fill="#dc2626" stroke="#fff" stroke-width="1"/><text x="30" y="37" font-size="7" font-weight="900" fill="#fff" text-anchor="middle">ZENVO</text></svg>`,
   "Apollo": `<svg viewBox="0 0 60 40"><path d="M30 5 L48 31 H12 Z" fill="none" stroke="#eab308" stroke-width="2.5"/><path d="M30 13 L39 28 H21 Z" fill="#eab308"/></svg>`,
   "SSC North America": `<svg viewBox="0 0 60 40"><path d="M12 28 L20 10 H40 L48 28 Z" fill="#111827" stroke="#e2e8f0" stroke-width="2"/><text x="30" y="24" font-size="10" font-weight="900" fill="#fff" text-anchor="middle">SSC</text></svg>`,
-  "Aspark": `<svg viewBox="0 0 60 40"><path d="M10 25 Q30 2 50 25 L42 25 Q30 12 18 25 Z" fill="#00d2ff"/><text x="30" y="36" font-size="7" font-weight="900" fill="#fff" text-anchor="middle">ASPARK</text></svg>`
+  "Aspark": `<svg viewBox="0 0 60 40"><path d="M10 25 Q30 2 50 25 L42 25 Q30 12 18 25 Z" fill="#00d2ff"/><text x="30" y="36" font-size="7" font-weight="900" fill="#fff" text-anchor="middle">ASPARK</text></svg>`,
+  // === LOGOTIPOS AÑADIDOS PARA TODAS LAS MARCAS DEL CATÁLOGO ===
+  "APR Performance": `<svg viewBox="0 0 60 40"><path d="M7 29 L19 8 H41 L53 29 Z" fill="#111827" stroke="#ef4444" stroke-width="2"/><text x="30" y="24" font-size="12" font-weight="900" fill="#fff" text-anchor="middle">APR</text></svg>`,
+  "BMW M Motorsport": `<svg viewBox="0 0 60 40"><path d="M10 8 L23 8 L18 20 L31 8 L44 8 L32 32 L20 32 L25 20 L13 32 Z" fill="#fff"/><path d="M31 8 H43 L38 20 H26 Z" fill="#009ada"/><path d="M20 20 H32 L27 32 H15 Z" fill="#dc2626"/><path d="M39 20 H51 L46 32 H34 Z" fill="#1d4ed8"/></svg>`,
+  "Cadillac Racing": `<svg viewBox="0 0 60 40"><path d="M15 8 H45 L42 27 L30 35 L18 27 Z" fill="#111827" stroke="#eab308" stroke-width="2"/><path d="M20 12 H29 V20 H20 Z M31 12 H40 V20 H31 Z M20 22 H29 V28 H20 Z M31 22 H40 V28 H31 Z" fill="#cbd5e1"/><text x="30" y="7" font-size="5" font-weight="900" fill="#fff" text-anchor="middle">RACING</text></svg>`,
+  "Glickenhaus": `<svg viewBox="0 0 60 40"><path d="M9 8 H51 V32 H9 Z" fill="#111827" stroke="#dc2626" stroke-width="2"/><text x="30" y="24" font-size="10" font-weight="900" fill="#fff" text-anchor="middle">SCG</text></svg>`,
+  "Nissan": `<svg viewBox="0 0 60 40"><circle cx="30" cy="20" r="16" fill="none" stroke="#cbd5e1" stroke-width="2.5"/><path d="M8 16 H52 V24 H8 Z" fill="#cbd5e1"/><text x="30" y="22" font-size="8" font-weight="900" fill="#111827" text-anchor="middle">NISSAN</text></svg>`,
+  "Nissan Nismo": `<svg viewBox="0 0 60 40"><circle cx="30" cy="20" r="15" fill="none" stroke="#cbd5e1" stroke-width="3"/><rect x="8" y="15" width="44" height="10" fill="#e60012"/><text x="30" y="22.5" font-size="7" font-weight="900" fill="#fff" text-anchor="middle">NISMO</text></svg>`,
+  "Red Bull Racing": `<svg viewBox="0 0 60 40"><path d="M7 12 Q18 5 29 13 Q40 5 53 12 L48 28 Q39 34 30 26 Q19 34 11 28 Z" fill="#0b1f55" stroke="#facc15" stroke-width="1.5"/><circle cx="22" cy="20" r="6" fill="#dc2626"/><circle cx="38" cy="20" r="6" fill="#dc2626"/><text x="30" y="37" font-size="5.5" font-weight="900" fill="#fff" text-anchor="middle">RED BULL</text></svg>`,
+  "Vanwall": `<svg viewBox="0 0 60 40"><path d="M8 9 H52 L44 31 H16 Z" fill="#14532d" stroke="#d4af37" stroke-width="2"/><path d="M18 14 L27 27 L34 14 L42 27" fill="none" stroke="#fff" stroke-width="2.5"/><text x="30" y="37" font-size="5.5" font-weight="900" fill="#fff" text-anchor="middle">VANWALL</text></svg>`,
+  "Williams Racing": `<svg viewBox="0 0 60 40"><path d="M7 10 H53 L43 30 H17 Z" fill="#0b2a5b" stroke="#00a3e0" stroke-width="2"/><text x="30" y="24" font-size="9" font-style="italic" font-weight="900" fill="#fff" text-anchor="middle">W</text><path d="M17 31 H43" stroke="#00a3e0" stroke-width="2"/></svg>`,
+  "Škoda": `<svg viewBox="0 0 60 40"><circle cx="30" cy="20" r="16" fill="#fff" stroke="#15803d" stroke-width="2"/><path d="M17 23 L30 9 L43 23 L35 22 L30 16 L25 22 Z" fill="#15803d"/><path d="M25 25 H35 L30 31 Z" fill="#15803d"/></svg>`
 };
 
 function getBrandLogoHTML(brand) {
-  return BRAND_LOGOS[brand] || `<svg viewBox="0 0 60 40"><circle cx="30" cy="20" r="14" fill="#334155"/></svg>`;
+  return BRAND_LOGOS[brand] || `<svg viewBox="0 0 60 40"><rect x="5" y="6" width="50" height="28" rx="6" fill="#172033" stroke="#94a3b8" stroke-width="1.5"/><text x="30" y="23" font-size="${brand && brand.length > 8 ? 8 : 11}" font-weight="900" fill="#fff" text-anchor="middle">${String(brand || "?").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").slice(0,12)}</text></svg>`;
 }
 
-// ==================== 2. CATÁLOGO DE 218 COCHES ====================
+// ==================== 2. CATÁLOGO DE 248 COCHES ====================
 const CARS = [
   // === PROTOTIPOS LMP1 / HYPERCAR / GR.1 (PROTO) ===
   { id: 1, brand: "Toyota Gazoo", name: "GR010 Hybrid Hypercar", region: "JP", cat: "PROTO", bodyType: "proto", cls: "Gr.1", hp: 986, weight: 878, drive: "AWD", maxSpeed: 376, accel: 99, handling: 98, color: "#dc2626", accent: "#ffffff", wing: "lmp" },
@@ -1318,7 +1338,50 @@ const CARS = [
   { id:215, brand:"Toyota Gazoo", name:"GR010 Champion Edition", region:"JP", cat:"PROTO", bodyType:"proto", cls:"Legendary", hp:1000, weight:1050, drive:"AWD", maxSpeed:380, accel:99, handling:100, color:"#f8fafc", accent:"#dc2626", wing:"lmp", exclusive:"clean", requirement:"Completa 10 carreras limpias" },
   { id:216, brand:"Nissan Nismo", name:"GT-R GT500 Daikoku Legend", region:"JP", cat:"GT", bodyType:"gt", cls:"Legendary", hp:650, weight:1050, drive:"RWD", maxSpeed:345, accel:97, handling:98, color:"#111827", accent:"#00d2ff", wing:"swan", exclusive:"night", requirement:"Gana 3 carreras nocturnas" },
   { id:217, brand:"Mazda", name:"787B Le Mans Heritage", region:"JP", cat:"PROTO", bodyType:"proto", cls:"Legendary", hp:720, weight:830, drive:"RWD", maxSpeed:370, accel:97, handling:98, color:"#ea580c", accent:"#16a34a", wing:"lmp", exclusive:"podiums", requirement:"Consigue 10 podios" },
-  { id:218, brand:"Koenigsegg", name:"Jesko Absolut One:1 Edition", region:"EU", cat:"STREET", bodyType:"street", cls:"Ultimate", hp:1600, weight:1390, drive:"RWD", maxSpeed:450, accel:100, handling:97, color:"#f8fafc", accent:"#0284c7", wing:"swan", exclusive:"wins10", requirement:"Gana 10 carreras" }
+  { id:218, brand:"Koenigsegg", name:"Jesko Absolut One:1 Edition", region:"EU", cat:"STREET", bodyType:"street", cls:"Ultimate", hp:1600, weight:1390, drive:"RWD", maxSpeed:450, accel:100, handling:97, color:"#f8fafc", accent:"#0284c7", wing:"swan", exclusive:"wins10", requirement:"Gana 10 carreras" },
+
+  // === NUEVOS VEHÍCULOS: EXPANSIÓN DE TODAS LAS CATEGORÍAS ===
+  // PROTO / LMP / HYPERCAR
+  { id:219, brand:"Cadillac Racing", name:"V-Series.R LMDh", region:"US", cat:"PROTO", bodyType:"proto", cls:"Gr.1", hp:670, weight:1030, drive:"RWD", maxSpeed:345, accel:96, handling:98, color:"#d1d5db", accent:"#111827", wing:"lmp" },
+  { id:220, brand:"BMW M Motorsport", name:"M Hybrid V8 LMDh", region:"EU", cat:"PROTO", bodyType:"proto", cls:"Gr.1", hp:640, weight:1030, drive:"AWD", maxSpeed:342, accel:96, handling:97, color:"#f8fafc", accent:"#2563eb", wing:"lmp" },
+  { id:221, brand:"Alpine", name:"A424 LMDh", region:"EU", cat:"PROTO", bodyType:"proto", cls:"Gr.1", hp:675, weight:1030, drive:"RWD", maxSpeed:344, accel:97, handling:98, color:"#0284c7", accent:"#f8fafc", wing:"lmp" },
+  { id:222, brand:"Glickenhaus", name:"007 LMH", region:"US", cat:"PROTO", bodyType:"proto", cls:"Gr.1", hp:680, weight:1030, drive:"RWD", maxSpeed:348, accel:97, handling:97, color:"#dc2626", accent:"#f8fafc", wing:"lmp" },
+  { id:223, brand:"Vanwall", name:"Vandervell 680 Hypercar", region:"EU", cat:"PROTO", bodyType:"proto", cls:"Gr.1", hp:680, weight:1030, drive:"RWD", maxSpeed:340, accel:95, handling:96, color:"#15803d", accent:"#f8fafc", wing:"lmp" },
+
+  // GT3 / GT2 / GT500
+  { id:224, brand:"McLaren", name:"720S GT3 Evo", region:"EU", cat:"GT", bodyType:"gt", cls:"Gr.3", hp:585, weight:1300, drive:"RWD", maxSpeed:325, accel:94, handling:97, color:"#f97316", accent:"#111827", wing:"swan" },
+  { id:225, brand:"BMW M Motorsport", name:"M4 GT3", region:"EU", cat:"GT", bodyType:"gt", cls:"Gr.3", hp:590, weight:1300, drive:"RWD", maxSpeed:322, accel:93, handling:97, color:"#2563eb", accent:"#f8fafc", wing:"gt" },
+  { id:226, brand:"Ford Performance", name:"Mustang GT3", region:"US", cat:"GT", bodyType:"gt", cls:"Gr.3", hp:550, weight:1300, drive:"RWD", maxSpeed:320, accel:93, handling:95, color:"#1d4ed8", accent:"#f8fafc", wing:"gt" },
+  { id:227, brand:"Lexus", name:"RC F GT3 2024", region:"JP", cat:"GT", bodyType:"gt", cls:"Gr.3", hp:550, weight:1300, drive:"RWD", maxSpeed:321, accel:93, handling:96, color:"#f8fafc", accent:"#dc2626", wing:"gt" },
+  { id:228, brand:"Aston Martin", name:"Vantage AMR GT3 Evo", region:"EU", cat:"GT", bodyType:"gt", cls:"Gr.3", hp:535, weight:1300, drive:"RWD", maxSpeed:319, accel:92, handling:96, color:"#065f46", accent:"#d4af37", wing:"swan" },
+
+  // VISION GT / CONCEPT
+  { id:229, brand:"Jaguar", name:"Vision Gran Turismo SV", region:"EU", cat:"CONCEPT", bodyType:"concept", cls:"Gr.X", hp:1903, weight:1400, drive:"AWD", maxSpeed:410, accel:100, handling:99, color:"#0f172a", accent:"#00d2ff", wing:"lmp" },
+  { id:230, brand:"Genesis", name:"X Gran Berlinetta VGT", region:"KR", cat:"CONCEPT", bodyType:"concept", cls:"Gr.X", hp:1071, weight:1000, drive:"MR", maxSpeed:380, accel:99, handling:98, color:"#7f1d1d", accent:"#d4af37", wing:"swan" },
+  { id:231, brand:"Škoda", name:"Vision Gran Turismo", region:"EU", cat:"CONCEPT", bodyType:"concept", cls:"Gr.X", hp:1088, weight:1300, drive:"AWD", maxSpeed:390, accel:99, handling:97, color:"#16a34a", accent:"#111827", wing:"lmp" },
+  { id:232, brand:"Nissan", name:"GT-R LM NISMO Vision Concept", region:"JP", cat:"CONCEPT", bodyType:"concept", cls:"Gr.X", hp:1000, weight:1200, drive:"AWD", maxSpeed:375, accel:98, handling:96, color:"#cbd5e1", accent:"#dc2626", wing:"swan" },
+  { id:233, brand:"Porsche", name:"Mission X Concept", region:"EU", cat:"CONCEPT", bodyType:"concept", cls:"Gr.X", hp:1500, weight:1500, drive:"AWD", maxSpeed:395, accel:100, handling:99, color:"#f8fafc", accent:"#dc2626", wing:"swan" },
+
+  // FÓRMULA / MONOPLAZAS
+  { id:234, brand:"Ferrari", name:"SF-24 Formula One", region:"EU", cat:"FORMULA", bodyType:"formula", cls:"F1", hp:1000, weight:798, drive:"RWD", maxSpeed:365, accel:100, handling:100, color:"#dc2626", accent:"#f8fafc", wing:"lmp" },
+  { id:235, brand:"McLaren", name:"MCL38 Formula One", region:"EU", cat:"FORMULA", bodyType:"formula", cls:"F1", hp:1000, weight:798, drive:"RWD", maxSpeed:366, accel:100, handling:100, color:"#f97316", accent:"#111827", wing:"lmp" },
+  { id:236, brand:"Red Bull Racing", name:"RB20 Formula One", region:"EU", cat:"FORMULA", bodyType:"formula", cls:"F1", hp:1000, weight:798, drive:"RWD", maxSpeed:368, accel:100, handling:100, color:"#1d4ed8", accent:"#eab308", wing:"lmp" },
+  { id:237, brand:"Williams Racing", name:"FW46 Formula One", region:"EU", cat:"FORMULA", bodyType:"formula", cls:"F1", hp:990, weight:798, drive:"RWD", maxSpeed:358, accel:99, handling:98, color:"#0284c7", accent:"#f8fafc", wing:"lmp" },
+  { id:238, brand:"Alpine", name:"A524 Formula One", region:"EU", cat:"FORMULA", bodyType:"formula", cls:"F1", hp:990, weight:798, drive:"RWD", maxSpeed:356, accel:99, handling:98, color:"#0284c7", accent:"#f97316", wing:"lmp" },
+
+  // CALLE / SUPERCARS / HYPERCARS
+  { id:239, brand:"Pininfarina", name:"Battista", region:"EU", cat:"STREET", bodyType:"street", bodyStyle:"supercar", cls:"Hyper EV", hp:1900, weight:2060, drive:"AWD", maxSpeed:350, accel:100, handling:96, color:"#7c3aed", accent:"#f8fafc", wing:"lip" },
+  { id:240, brand:"Koenigsegg", name:"Gemera HV8", region:"EU", cat:"STREET", bodyType:"street", bodyStyle:"supercar", cls:"Mega-GT", hp:2300, weight:1850, drive:"AWD", maxSpeed:400, accel:100, handling:97, color:"#f8fafc", accent:"#dc2626", wing:"swan" },
+  { id:241, brand:"Ferrari", name:"12Cilindri", region:"EU", cat:"STREET", bodyType:"street", bodyStyle:"supercar", cls:"Supercar", hp:819, weight:1560, drive:"RWD", maxSpeed:340, accel:97, handling:96, color:"#dc2626", accent:"#facc15", wing:"lip" },
+  { id:242, brand:"Lamborghini", name:"Revuelto", region:"EU", cat:"STREET", bodyType:"street", bodyStyle:"supercar", cls:"Hybrid V12", hp:1001, weight:1772, drive:"AWD", maxSpeed:350, accel:99, handling:98, color:"#eab308", accent:"#111827", wing:"swan" },
+  { id:243, brand:"Aston Martin", name:"Valour", region:"EU", cat:"STREET", bodyType:"street", bodyStyle:"supercar", cls:"Modern Classic", hp:705, weight:1655, drive:"RWD", maxSpeed:322, accel:94, handling:93, color:"#14532d", accent:"#d4af37", wing:"lip" },
+
+  // TUNERS / PREPARACIONES ESPECIALES
+  { id:244, brand:"HKS", name:"Toyota GR Supra HKS TRB-03", region:"JP", cat:"TUNER", bodyType:"street", bodyStyle:"jdm", cls:"TUNER", hp:700, weight:1420, drive:"RWD", maxSpeed:345, accel:95, handling:96, color:"#f8fafc", accent:"#dc2626", wing:"gt" },
+  { id:245, brand:"Top Secret", name:"Nissan GT-R VR38 Gold Edition", region:"JP", cat:"TUNER", bodyType:"street", bodyStyle:"jdm", cls:"TUNER", hp:1000, weight:1580, drive:"AWD", maxSpeed:360, accel:97, handling:95, color:"#d4af37", accent:"#111827", wing:"swan" },
+  { id:246, brand:"Liberty Walk", name:"Lamborghini Aventador LB-Silhouette", region:"JP", cat:"TUNER", bodyType:"street", bodyStyle:"supercar", cls:"TUNER", hp:780, weight:1600, drive:"AWD", maxSpeed:350, accel:96, handling:94, color:"#f8fafc", accent:"#dc2626", wing:"gt" },
+  { id:247, brand:"Mugen", name:"Honda Civic Type R Mugen RR", region:"JP", cat:"TUNER", bodyType:"street", bodyStyle:"jdm", cls:"TUNER", hp:350, weight:1280, drive:"FWD", maxSpeed:285, accel:88, handling:95, color:"#dc2626", accent:"#f8fafc", wing:"gt" },
+  { id:248, brand:"APR Performance", name:"Subaru WRX STI Widebody", region:"JP", cat:"TUNER", bodyType:"street", bodyStyle:"jdm", cls:"TUNER", hp:600, weight:1380, drive:"AWD", maxSpeed:320, accel:93, handling:96, color:"#1d4ed8", accent:"#f8fafc", wing:"gt" }
 ];
 
 // ==================== 3. 14 CIRCUITOS CON ESCENOGRAFÍA DETALLADA ====================
@@ -2568,8 +2631,19 @@ function getClosestSplineInfo(px, py) {
   return { idx: closestIdx, dist: Math.sqrt(minDistSq) };
 }
 
+// Pilotos reales de Fórmula 1, resistencia y GT usados como nombres del roster de IA.
+const AI_PILOT_NAMES = [
+  "Max Verstappen", "Lewis Hamilton", "Charles Leclerc", "Lando Norris", "Fernando Alonso",
+  "Carlos Sainz", "Oscar Piastri", "George Russell", "Sergio Pérez", "Pierre Gasly",
+  "Esteban Ocon", "Alex Albon", "Yuki Tsunoda", "Kimi Antonelli", "Nico Hülkenberg",
+  "Mick Schumacher", "Kamui Kobayashi", "Sébastien Buemi", "Brendon Hartley", "Mike Conway",
+  "Antonio Giovinazzi", "Nick Tandy", "Laurens Vanthoor", "Kévin Estre", "Earl Bamber",
+  "James Calado", "Alessandro Pier Guidi", "Miguel Molina", "René Rast", "Raffaele Marciello"
+];
+
 function spawnAIDrivers() {
   aiDrivers = [];
+  let pilotPool = [...AI_PILOT_NAMES].sort(() => Math.random() - 0.5);
   let pool = CARS.filter(c => c.id !== selectedCar.id && c.cat === selectedCar.cat);
   if (pool.length < 5) {
     pool = CARS.filter(c => c.id !== selectedCar.id);
@@ -2587,6 +2661,7 @@ function spawnAIDrivers() {
 
     aiDrivers.push({
       car,
+      pilotName: pilotPool[i] || `Piloto ${i + 1}`,
       x: pt.x + nx,
       y: pt.y + ny,
       angle: ang,
@@ -2663,6 +2738,7 @@ function restartRace() {
   bestLapTime = null;
   lapTimes = []; raceFinished = false; tireWear = 0; carDamage = 0; collisionCooldown = 0; pitStopUsed=false; racePenaltySeconds=0;
   raceStartTime = lapStartTime = performance.now();
+  aiDrivers.forEach(ai => { ai.lapStartedAt = raceStartTime; ai.bestLapTime = null; });
   document.getElementById("hudBestTime").textContent = "--:--.--";
   isPaused = false;
   document.getElementById("pause-modal").style.display = "none";
@@ -2864,6 +2940,9 @@ function updateRace(dt, now) {
       const prevAiWp = ai.waypointIdx;
       ai.waypointIdx = (ai.waypointIdx + 1) % totalPts;
       if (prevAiWp > totalPts * 0.8 && ai.waypointIdx < totalPts * 0.2) {
+        const aiLapTime = (now - (ai.lapStartedAt || raceStartTime)) / 1000;
+        if (ai.bestLapTime === null || aiLapTime < ai.bestLapTime) ai.bestLapTime = aiLapTime;
+        ai.lapStartedAt = now;
         ai.lap++;
       }
     }
@@ -2928,8 +3007,11 @@ function requestPitStop(){
 function finishRace(now) {
   if(raceFinished)return; raceFinished=true; raceRunning=false; isPaused=false;
   const elapsed=(now-raceStartTime)/1000;
-  const standings=[{name:"Tú",progress:totalLaps*splinePoints.length}].concat(aiDrivers.map(a=>({name:a.car.name,progress:a.progress}))).sort((a,b)=>b.progress-a.progress);
-  const position=standings.findIndex(x=>x.name==="Tú")+1;
+  const standings=[{pilotName:"Tú",car:selectedCar,progress:totalLaps*splinePoints.length,bestLapTime,player:true}]
+    .concat(aiDrivers.map(a=>({pilotName:a.pilotName || "Piloto invitado",car:a.car,progress:a.progress,bestLapTime:a.bestLapTime,player:false})))
+    .sort((a,b)=>b.progress-a.progress);
+  const position=standings.findIndex(x=>x.player)+1;
+  document.getElementById("classificationTable").innerHTML=`<table class="classification-table"><thead><tr><th>Pos.</th><th>Piloto</th><th>Modelo del coche</th><th>Marca</th><th>Tiempo récord</th></tr></thead><tbody>${standings.map((entry,index)=>`<tr><td>${index+1}</td><td>${entry.pilotName}</td><td>${entry.car.name}</td><td><span class="classification-brand"><span class="brand-badge">${getBrandLogoHTML(entry.car.brand)}</span><span>${entry.car.brand}</span></span></td><td>${entry.bestLapTime!==null && entry.bestLapTime!==undefined ? formatTime(entry.bestLapTime) : "--:--.--"}</td></tr>`).join("")}</tbody></table>`;
   const reward=[9000,6500,4500,3000,2000,1500][position-1]||1200;
   const cleanBonus=carDamage<8?1500:0; const totalReward=reward+cleanBonus;
   career.credits+=totalReward; career.races++; if(position===1)career.wins++;
